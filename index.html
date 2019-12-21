@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Make a syntax highlighter for MySQL using JavaScript and Regex</title>
+  <link href="assets/css/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <!-- pre tag to contain the highlighted code -->
+  <pre id="layer"></pre>
+
+  <!-- textarea to contain the raw sql -->
+  <textarea id="highlight" name="highlight">
+    #This is a mysql syntax highlighter
+    -- This is a comment
+
+    /* And this is a multi line comment
+    SELECT things FROM table;
+    */
+
+    SELECT
+    ag.name AS agent, 'd.date', d.first_payment_date,
+    d.account_number, d.id as disbursement_id, d.amount as loan_amount,
+    d.late_fee, b.id as bid, b.name as borrower, tf.name as payment_frequency,
+    ap.id as application_id,
+
+    (SELECT COUNT(id) FROM payment_schedule WHERE disbursement_id = d.id AND skip = '1') as skip_count,
+
+    IFNULL(SUM(r.principal), 0) as paid_principal,
+
+    IF(d.interest_calculation_method_id = 2, d.amount, IFNULL(SELECTSUM(principal) FROM payment_schedule WHERE disbursement_id = d.id AND skip = '0' AND date <= CURDATE()), 0)) as principal,
+
+    IF (d.interest_calculation_method_id IN(2,3), d.amount - (SELECT IFNULL))
+  </textarea>
+
+  <!-- jQuery -->
+  <script src="http://thecodeplayer.com/uploads/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+
+  <!-- prefixfree -->
+  <script src="http://thecodeplayer.com/uploads/js/prefixfree-1.0.7.js" type="text/javascript" type="text/javascript"></script>
+  <script type="text/javascript" src="assets/js/script.js"></script>
+</body>
+</html>
