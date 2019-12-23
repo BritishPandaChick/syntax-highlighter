@@ -1,0 +1,34 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  padding: 30px;
+}
+
+#highlight {
+  display: none;
+}
+
+/* colors */
+.sc {
+  color: brown;
+}
+
+.keyword {
+  color: purple;
+  font-weight: bold;
+}
+
+.string {
+  color: darkgreen;
+}
+
+.comment {
+  color: green;
+}
+
+.function {
+  color: red;
+}

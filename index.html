@@ -29,7 +29,17 @@
 
     IF(d.interest_calculation_method_id = 2, d.amount, IFNULL(SELECTSUM(principal) FROM payment_schedule WHERE disbursement_id = d.id AND skip = '0' AND date <= CURDATE()), 0)) as principal,
 
-    IF (d.interest_calculation_method_id IN(2,3), d.amount - (SELECT IFNULL))
+    IF (d.interest_calculation_method_id IN(2,3), d.amount - (SELECT IFNULL(SUM(principal), 0) FROM receipts WHERE disbursement_id = d.id), IFNULL(SELECT SUM(principal+interest) FROM payment_schedule WHERE disbursement_id = d.id AND skip = '0' AND date <= CURDATE()), 0)) as psamount,
+
+    FROM disbursement d
+    LEFT JOIN receipts r ON r.disbursement_id=d.id
+    LEFT JOIN applications ap ON d.application_id = ap.id
+    LEFT JOIN agents ag ON ap.vt_user_id = ag.vt_user_id
+    LEFT JOIN borrowers b ON ap.borrower_id = b.id
+    LEFT JOIN time_frequencies tf ON d.payment_frequency_id = tf.id
+
+    WHERE d.status = 'active'
+    ORDER BY due_date
   </textarea>
 
   <!-- jQuery -->
