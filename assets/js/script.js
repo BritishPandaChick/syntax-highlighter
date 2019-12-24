@@ -6,6 +6,7 @@ $(document).ready(function(){
   "LEFT", "LIKE", "LIMIT", "MATCH", "NOT", "NULL", "ON", "OPTION", "OR", "ORDER",
   "OUT", "OUTER", "REPLACE", "RIGHT", "SELECT", "SET", "TABLE", "THEN", "TO", "TRUE",
   "UPDDATE", "VALUES", "WHEN", "WHERE"];
+
   //adding lowercase keyword support
   var len = k.length;
   for(var i=0; i < len; i++) {
@@ -43,13 +44,28 @@ $(document).ready(function(){
 
   //comments - tricky
   //comments starting with a '#'
-  c = c.replace(/(#.*?\n)/g, "<span class=\"comment\">$1</span>");
+  c = c.replace(/(#.*?\n)/g, clear_spans);
 
   //comments starting with '--'
   //first we need to remove the spans applied to the '--' as a special char
   c = c.replace(/<span class=\"sc\">-</span><span class=\"sc\">-</span>/g, "--");
-  c = c.replace(/(--.*?\n)/g, "<span class=\"comment\">$1</span>");
+  c = c.replace(/(--.*?\n)/g, clear_spans);
 
+  //comments inside /*...*/
+  //Filtering out spans attached to /* and */ as special chars
+  c = c.replace(/<span class=\"sc\">\/<\/span><span class=\"sc\">\*<\/span>/g, "/*");
+  c = c.replace(/<span class=\"sc\">\*<\/span><span class=\"sc\">\/</span>/g, "*/");
+  //The dot operator cannot match newlines. Use [\s\S] as a hack to select everything(spaece or non space characters)
+  c = c.replace(/(\/\*[\s\S]*?\*\/)/g, clear_spans);
 
   $("#layer").html(c); //injecting the code into the pre tag
+
+  /* see keywords are purple inside the comments,
+  we will create a filter function to remove those spans.
+  This function will not be used in .replace() instead of a replacement string  */
+  function clear_spans(match){
+    match = match.replace(/<span.*?>/g, "");
+    match = match.replace(/<\/span>/g, "");
+    return "<span class=\"comment\">" + match + "</span>";
+  }
 });
