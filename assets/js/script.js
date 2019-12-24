@@ -1,4 +1,18 @@
 $(document).ready(function(){
+  //full list of reserved words: http://dev.mysql.com/doc/refman/5.0/en/reserved-words.html
+  var k = ["AND", "AS", "ASC", "BETWEEN", "BY", "CASE", "CURRENT_DATE", "CURRENT_TIME",
+  "DELETE", "DESC", "DISTINCT", "EACH", "ELSE", "ELSEIF", "FALSE", "FOR", "FROM",
+  "GROUP", "HAVING", "IF", "IN", "INSERT", "INTERVAL", "INTO", "IS", "JOIN", "KEY", "KEYS",
+  "LEFT", "LIKE", "LIMIT", "MATCH", "NOT", "NULL", "ON", "OPTION", "OR", "ORDER",
+  "OUT", "OUTER", "REPLACE", "RIGHT", "SELECT", "SET", "TABLE", "THEN", "TO", "TRUE",
+  "UPDDATE", "VALUES", "WHEN", "WHERE"];
+  //adding lowercase keyword support
+  var len = k.length;
+  for(var i=0; i < len; i++) {
+    k.push(k[i].toLowerCase());
+  }
+
+  var re;
   var c = $("#highlight").val(); //raw code
   //regex time
   //highlighting special characters /, *, + are escaped using a blackslash
@@ -19,6 +33,23 @@ $(document).ready(function(){
   c = c.replace(/([\(\)])/g, "<span class=\"sc\">$1</span>");
 
   //reserved mysql keywords
+  for(var i=0; i < k.length; i++){
+    /* regex pattern will be formulated based on the array values surrounded by
+    word boundaries since the replace function does not accept a string as a regex
+    pattern, we will use a regex object this time */
+    re = new RegExp("\\b" + k[i] + "\\b", "g");
+    c = c.replace(re, "<span class=\"keyword\">" + k[i] + "</span>");
+  }
+
+  //comments - tricky
+  //comments starting with a '#'
+  c = c.replace(/(#.*?\n)/g, "<span class=\"comment\">$1</span>");
+
+  //comments starting with '--'
+  //first we need to remove the spans applied to the '--' as a special char
+  c = c.replace(/<span class=\"sc\">-</span><span class=\"sc\">-</span>/g, "--");
+  c = c.replace(/(--.*?\n)/g, "<span class=\"comment\">$1</span>");
+
 
   $("#layer").html(c); //injecting the code into the pre tag
 });
