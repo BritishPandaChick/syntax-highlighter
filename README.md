@@ -1,11 +1,14 @@
 # MySQL Syntax Highlighter
-CodePlayer Syntax Highlighter for MySQL project. Made with HTML, CSS, JavaScript, and jQuery.
+An example of syntax highlighter in SQL
+
+## Tech Stack
+- HTML
+- CSS
+- JavaScript
+- jQuery
 
 ## Instructions
-Clone this repo or download zip file. Open index.html file in your browser.
-
-## Contributions
-This code is based on starter code from TheCodePlayer.com. Therefore I will not be accepting any pull requests.
+Clone this repo or download zip file. When the index.html file is open, you would see some SQL code on the page.
 
 ## Acknowledgements
 * TheCodePlayer.com
